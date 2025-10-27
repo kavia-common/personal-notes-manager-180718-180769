@@ -16,15 +16,18 @@ export default component$(() => {
   const noteId = loc.params["id"];
   const ready = useSignal(false);
 
+  // Destructure to avoid capturing the store object in closures
+  const { load, upsert } = store;
+
   useTask$(() => {
-    store.load();
+    load();
     ready.value = true;
   });
 
   const note = findNoteById(store.notes, noteId);
 
   const handleSave$ = $((n: { title: string; content: string }) => {
-    store.upsert({ id: noteId, title: n.title, content: n.content });
+    upsert({ id: noteId, title: n.title, content: n.content });
     if (typeof location !== "undefined") {
       location.href = "/";
     }
@@ -54,6 +57,9 @@ export default component$(() => {
   );
 });
 
+/**
+ * Document head metadata for the Edit Note page.
+ */
 export const head: DocumentHead = {
   title: "Edit Note - Personal Notes Manager",
 };

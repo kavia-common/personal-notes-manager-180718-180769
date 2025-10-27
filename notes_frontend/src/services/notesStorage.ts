@@ -42,56 +42,62 @@ function newId(): string {
 /**
  * PUBLIC_INTERFACE
  * Store hook for managing notes list and actions.
+ * Avoids TDZ by creating the store first and then attaching methods that reference it.
  */
 export function useNotesStore() {
+  // Create the store object with only serializable state
   const store = useStore({
     notes: [] as Note[],
     loaded: false,
-    load: $(() => {
-      if (store.loaded) return;
-      store.notes = readAll().sort((a, b) => b.updatedAt - a.updatedAt);
-      store.loaded = true;
-    }),
-    upsert: $((note: { id?: string; title: string; content: string }) => {
-      const now = Date.now();
-      let updated: Note;
-      if (!note.id) {
+  });
+
+  // Define methods separately; do not assign them as properties on the store object.
+  const load = $(() => {
+    if (store.loaded) return;
+    store.notes = readAll().sort((a, b) => b.updatedAt - a.updatedAt);
+    store.loaded = true;
+  });
+
+  const upsert = $((note: { id?: string; title: string; content: string }) => {
+    const now = Date.now();
+    let updated: Note;
+    if (!note.id) {
+      updated = {
+        id: newId(),
+        title: note.title,
+        content: note.content,
+        updatedAt: now,
+      };
+      store.notes = [updated, ...store.notes];
+    } else {
+      const idx = store.notes.findIndex((n) => n.id === note.id);
+      if (idx >= 0) {
+        updated = { ...store.notes[idx], ...note, updatedAt: now };
+        const clone = store.notes.slice();
+        clone[idx] = updated;
+        clone.sort((a, b) => b.updatedAt - a.updatedAt);
+        store.notes = clone;
+      } else {
         updated = {
-          id: newId(),
+          id: note.id,
           title: note.title,
           content: note.content,
           updatedAt: now,
         };
         store.notes = [updated, ...store.notes];
-      } else {
-        const idx = store.notes.findIndex((n) => n.id === note.id);
-        if (idx >= 0) {
-          updated = { ...store.notes[idx], ...note, updatedAt: now };
-          const clone = store.notes.slice();
-          clone[idx] = updated;
-          // re-sort by updatedAt
-          clone.sort((a, b) => b.updatedAt - a.updatedAt);
-          store.notes = clone;
-        } else {
-          updated = {
-            id: note.id,
-            title: note.title,
-            content: note.content,
-            updatedAt: now,
-          };
-          store.notes = [updated, ...store.notes];
-        }
       }
-      writeAll(store.notes);
-      return updated;
-    }),
-    remove: $((id: string) => {
-      store.notes = store.notes.filter((n) => n.id !== id);
-      writeAll(store.notes);
-    }),
+    }
+    writeAll(store.notes);
+    return updated;
   });
 
-  return store;
+  const remove = $((id: string) => {
+    store.notes = store.notes.filter((n) => n.id !== id);
+    writeAll(store.notes);
+  });
+
+  // Return store along with actions separately so callers can destructure and avoid lexical scope issues
+  return Object.assign(store, { load, upsert, remove });
 }
 
 // PUBLIC_INTERFACE

@@ -12,12 +12,15 @@ import { useNotesStore } from "~/services/notesStorage";
 export default component$(() => {
   const store = useNotesStore();
 
+  // Destructure to avoid capturing the store object in closures
+  const { load, upsert } = store;
+
   useTask$(() => {
-    store.load();
+    load();
   });
 
   const handleSave$ = $((n: { title: string; content: string }) => {
-    const created = store.upsert({ title: n.title, content: n.content, id: undefined });
+    const created = upsert({ title: n.title, content: n.content, id: undefined });
     if (typeof location !== "undefined") {
       const id = (created as any).id;
       location.href = `/note/${id}`;
@@ -37,6 +40,9 @@ export default component$(() => {
   );
 });
 
+/**
+ * Document head metadata for the New Note page.
+ */
 export const head: DocumentHead = {
   title: "New Note - Personal Notes Manager",
 };

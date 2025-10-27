@@ -13,9 +13,10 @@ export default component$(() => {
   const store = useNotesStore();
   const query = useSignal("");
 
+  // Avoid capturing the whole store in task closures
+  const { load } = store;
   useTask$(() => {
-    // Load once, do not reference non-serializable members in closure
-    store.load();
+    load();
   });
 
   const onSearchInput = $((e: Event) => {
@@ -28,6 +29,8 @@ export default component$(() => {
   const notes = q
     ? store.notes.filter((n) => (n.title || "").toLowerCase().includes(q))
     : store.notes;
+
+  const { remove } = store;
 
   return (
     <div class="ocean-app">
@@ -48,13 +51,16 @@ export default component$(() => {
             </a>
           </div>
 
-          <NoteList notes={notes} onDelete$={store.remove} />
+          <NoteList notes={notes} onDelete$={remove} />
         </main>
       </div>
     </div>
   );
 });
 
+/**
+ * Document head metadata for the Notes list page.
+ */
 export const head: DocumentHead = {
   title: "Personal Notes Manager",
   meta: [
