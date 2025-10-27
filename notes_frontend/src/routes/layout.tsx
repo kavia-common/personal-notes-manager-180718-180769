@@ -1,7 +1,11 @@
 import { component$, Slot, useStyles$ } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import styles from "./styles.css?inline";
+import "~/styles/theme.css";
 
+/**
+ * Cache control for layout.
+ */
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   cacheControl({
     staleWhileRevalidate: 60 * 60 * 24 * 7,
@@ -13,8 +17,8 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 export default component$(() => {
   useStyles$(styles);
   return (
-    <main>
+    <div class="app-shell">
       <Slot />
-    </main>
+    </div>
   );
 });

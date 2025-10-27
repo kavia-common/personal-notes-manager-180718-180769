@@ -1,0 +1,221 @@
+:root {
+  /* Ocean Professional Theme */
+  --primary: #2563EB;
+  --secondary: #F59E0B;
+  --success: #F59E0B;
+  --error: #EF4444;
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --text: #111827;
+
+  --radius: 12px;
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.04), 0 1px 1px rgba(0,0,0,0.02);
+  --shadow-2: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.06);
+  --ring: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.ocean-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(1200px 400px at 20% -10%, rgba(59, 130, 246, 0.08), transparent 60%),
+    radial-gradient(800px 300px at 80% -10%, rgba(107, 114, 128, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(243, 244, 246, 0.8), rgba(249, 250, 251, 0.9));
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: var(--shadow-1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.brand .logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(37,99,235,0.9), rgba(37,99,235,0.5));
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35), inset 0 1px 3px rgba(255,255,255,0.3);
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ocean-content {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  min-height: 0;
+  flex: 1;
+}
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid rgba(15, 23, 42, 0.06);
+  padding: 16px;
+}
+
+.nav-group {
+  display: grid;
+  gap: 8px;
+}
+
+.main-area {
+  padding: 20px;
+  min-width: 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  outline: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: var(--ring);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.06s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: var(--shadow-1);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+.btn.primary {
+  background: linear-gradient(135deg, rgba(37,99,235,0.95), rgba(37,99,235,0.75));
+  color: white;
+  border-color: rgba(37, 99, 235, 0.7);
+}
+.btn.danger {
+  background: linear-gradient(135deg, rgba(239,68,68,0.95), rgba(239,68,68,0.75));
+  color: white;
+  border-color: rgba(239,68,68,0.7);
+}
+
+.note-list {
+  display: grid;
+  gap: 10px;
+}
+
+.note-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #fff;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.06s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.note-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+.note-title {
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 4px 0;
+}
+.note-meta {
+  color: #6b7280;
+  font-size: 12px;
+}
+.note-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.editor {
+  display: grid;
+  gap: 10px;
+}
+.editor input.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+.editor textarea.body {
+  min-height: 220px;
+  resize: vertical;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  outline: none;
+}
+.editor textarea.body:focus {
+  border-color: var(--primary);
+  box-shadow: var(--ring);
+}
+
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 980px) {
+  .ocean-content {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  }
+}
